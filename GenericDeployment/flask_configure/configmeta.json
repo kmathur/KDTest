@@ -1,0 +1,208 @@
+{
+    "version": "7",
+    "services": {
+        "gunicorn": {
+            "1": {
+                "LoadBalancer": {
+                    "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "services", "gunicorn"]
+                },
+                "RESTServer": {
+                    "bdvlibrefkey": ["nodegroups", "1", "roles", "RESTServer", "services", "gunicorn"]
+                }
+            }
+        },
+        "haproxy": {
+            "1": {
+                "LoadBalancer": {
+                    "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "services", "haproxy"]
+                }
+            }
+        },
+        "haproxy-stats": {
+            "1": {
+                "LoadBalancer": {
+                    "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "services", "haproxy-stats"]
+                }
+            }
+        },
+        "haproxy-train": {
+            "1": {
+                "LoadBalancer": {
+                    "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "services", "haproxy-train"]
+                }
+            }
+        },
+        "ssh": {
+            "1": {
+                "RESTServer": {
+                    "bdvlibrefkey": ["nodegroups", "1", "roles", "RESTServer", "services", "ssh"]
+                }
+            }
+        }
+    },
+    "nodegroups": {
+        "1": {
+            "roles": {
+                "LoadBalancer": {
+                    "services": {
+                        "gunicorn": {
+                            "qualifiers": [],
+                            "name": "API Server",
+                            "id": "gunicorn",
+                            "hostnames": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "hostnames"]
+                            },
+                            "global_id": "1_LoadBalancer_gunicorn",
+                            "fqdns": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "fqdns"]
+                            },
+                            "exported_service": "",
+                            "endpoints": ["http://kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local:10001"]
+                        },
+                        "haproxy": {
+                            "qualifiers": [],
+                            "name": "Model Serving LoadBalancer",
+                            "id": "haproxy",
+                            "hostnames": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "hostnames"]
+                            },
+                            "global_id": "1_LoadBalancer_haproxy",
+                            "fqdns": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "fqdns"]
+                            },
+                            "exported_service": "AIML/Deployment",
+                            "endpoints": ["http://kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local:32800"]
+                        },
+                        "haproxy-stats": {
+                            "qualifiers": [],
+                            "name": "Model serving request balancer stats",
+                            "id": "haproxy-stats",
+                            "hostnames": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "hostnames"]
+                            },
+                            "global_id": "1_LoadBalancer_haproxy-stats",
+                            "fqdns": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "fqdns"]
+                            },
+                            "exported_service": "",
+                            "endpoints": ["http://kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local:8081"]
+                        },
+                        "haproxy-train": {
+                            "qualifiers": [],
+                            "name": "Training API Server",
+                            "id": "haproxy-train",
+                            "hostnames": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "hostnames"]
+                            },
+                            "global_id": "1_LoadBalancer_haproxy-train",
+                            "fqdns": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "LoadBalancer", "fqdns"]
+                            },
+                            "exported_service": "AIML/Training",
+                            "endpoints": ["http://kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local:32700"]
+                        }
+                    },
+                    "node_ids": ["2"],
+                    "hostnames": ["kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local"],
+                    "fqdns": ["kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local"],
+                    "fqdn_mappings": {
+                        "kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local": "2"
+                    },
+                    "flavor": {
+                        "storage": "n/a",
+                        "name": "n/a",
+                        "memory": "2048",
+                        "description": "n/a",
+                        "cores": "1"
+                    }
+                },
+                "RESTServer": {
+                    "services": {
+                        "gunicorn": {
+                            "qualifiers": [],
+                            "name": "API Server",
+                            "id": "gunicorn",
+                            "hostnames": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "RESTServer", "hostnames"]
+                            },
+                            "global_id": "1_RESTServer_gunicorn",
+                            "fqdns": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "RESTServer", "fqdns"]
+                            },
+                            "exported_service": "",
+                            "endpoints": ["http://kd-8l49k-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local:10001"]
+                        },
+                        "ssh": {
+                            "qualifiers": [],
+                            "name": "SSH",
+                            "id": "ssh",
+                            "hostnames": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "RESTServer", "hostnames"]
+                            },
+                            "global_id": "1_RESTServer_ssh",
+                            "fqdns": {
+                                "bdvlibrefkey": ["nodegroups", "1", "roles", "RESTServer", "fqdns"]
+                            },
+                            "exported_service": "",
+                            "endpoints": ["://kd-8l49k-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local:22"]
+                        }
+                    },
+                    "node_ids": ["1"],
+                    "hostnames": ["kd-8l49k-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local"],
+                    "fqdns": ["kd-8l49k-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local"],
+                    "fqdn_mappings": {
+                        "kd-8l49k-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local": "1"
+                    },
+                    "flavor": {
+                        "storage": "n/a",
+                        "name": "n/a",
+                        "memory": "2048",
+                        "description": "n/a",
+                        "cores": "1"
+                    }
+                }
+            },
+            "distro_id": "bluedata/flask-and-inf-eng",
+            "catalog_entry_version": "1.8",
+            "config_metadata": null
+        }
+    },
+    "distros": {
+        "bluedata/flask-and-inf-eng": {
+            "1": {
+                "bdvlibrefkey": ["nodegroups", "1"]
+            }
+        }
+    },
+    "cluster": {
+        "name": "flask-and-inf-eng",
+        "isolated": false,
+        "id": "b7345fba-80f5-4d28-8856-5dc4039ccd04",
+        "config_metadata": {
+            "1": {
+                "bdvlibrefkey": ["nodegroups", "1", "config_metadata"]
+            }
+        }
+    },
+    "node": {
+        "role_id": "LoadBalancer",
+        "nodegroup_id": "1",
+        "id": "2",
+        "hostname": "kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local",
+        "fqdn": "kd-qx6d9-0.svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local",
+        "domain": "svc-kgh2k.epic-tenant-5-skfmm.svc.cluster.local",
+        "distro_id": "bluedata/flask-and-inf-eng",
+        "depends_on": {}
+    },
+    "attachments": {
+        "clusters": {},
+        "models": {
+            "testmodel": {
+                "name": "testmodel",
+                "version": "1",
+                "model_location": "/bd-fs-mnt/k8sattachnfs/models",
+                "scoring_script": "/bd-fs-mnt/k8sattachnfs/code/hello_scoring.py"
+            }
+        }
+    }
+}

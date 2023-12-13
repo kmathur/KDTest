@@ -1,0 +1,14 @@
+[Unit]
+Description=Generic model server
+After=network.target
+
+[Service]
+StartLimitInterval=0
+Type=simple
+Restart=always
+RestartSec=300
+User=root
+ExecStart=/bin/gunicornstart
+
+[Install]
+WantedBy=multi-user.target

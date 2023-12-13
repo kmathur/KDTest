@@ -1,0 +1,42 @@
+global
+  #tune.ssl.default-dh-param 1024
+  #user        user
+  stats socket /tmp/stats user root level admin
+
+defaults
+    log global
+    mode tcp
+    option  dontlognull
+    retries 3
+    option redispatch
+    timeout connect  500000
+    timeout client  1000000
+    timeout server  1000000
+
+frontend localnodeds_rest
+   bind *:32700
+   mode http
+   default_backend http_backend_servers
+
+backend http_backend_servers
+   mode http
+   balance roundrobin
+   @@@GUNICORN_SERVERS@@@
+
+listen stats  
+    mode http
+    bind @@@FQDN@@@:8081
+    stats hide-version
+    stats refresh 30s
+    stats show-node
+    stats auth haproxy:haproxy
+    stats uri /
+
+# gRPC servers running on port 8083-8084
+#backend be_grpc
+  #mode tcp
+  #balance roundrobin
+  #server srv01 172.18.0.7:9000 check
+  #server srv02 172.18.0.8:9000 check
+  #timeout connect 1000s
+  #timeout server  1m

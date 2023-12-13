@@ -1,0 +1,68 @@
+FROM bluedata/centos7:latest
+
+# Install dTap
+RUN yum install -y centos-release-scl
+ADD tf_support /tmp/tf_support
+ADD tf_support/libbdfs_file_system_shared_r1_14_ABI.so /opt/bluedata/
+ADD tf_support/libbdfs_file_system_shared_r1_9.so /opt/bluedata/
+
+RUN /tmp/tf_support/install_dtap.sh
+
+RUN yum groupinstall -y 'Development Tools'
+
+# Install Anaconda version 2019.03. Released April 5, 2019
+# Anaconda installs many python ML packages
+RUN wget https://repo.continuum.io/archive/Anaconda3-2019.03-Linux-x86_64.sh
+RUN bash Anaconda3-2019.03-Linux-x86_64.sh -b
+
+# Create symbolic links
+RUN ln -s /root/anaconda3/bin/pip /bin/pip3
+RUN ln -s /root/anaconda3/bin/python3 /bin/python3
+RUN ln -s /root/anaconda3/bin/conda /bin/conda
+
+# Update conda environment
+#RUN conda update --all
+
+# Install python version 3.6.5. This is the common python version in Training and Deployment Environment
+RUN conda install python==3.6.5 -y
+
+# Install Tensorflow 1.14 with cuda 10.0. cuDNN 7.6 shall be installed. Tensorflow-metadata is a required package for later installations 
+RUN conda install -c anaconda tensorflow-gpu==2.0 cudatoolkit==10.0.130  gast==0.2.2 -y
+
+# Install Keras, Theano, and PyTorch
+#RUN conda install -c conda-forge apache-beam==2.14.0 -y
+RUN conda install -c conda-forge keras==2.2.5
+RUN conda install -c conda-forge theano==1.0.4
+RUN conda install -c pytorch pytorch==1.1.0 -y
+RUN conda install -c pytorch torchvision -y
+
+# Install some of the packages that do not come bundled with Anaconda
+RUN conda install numpy==1.16.4 # downgrade numpy to prevent tensorflow FutureWarnings
+RUN conda install plotly -y
+#RUN conda install dill -y
+#RUN conda install scipy -y 
+RUN conda install -c anaconda py-xgboost-gpu==0.90 -y
+
+# Install tensorflow libraries not a part of conda using pip. The versions are frozen to 0.14.0 as they are the latest versions that support TF 1.14.0. For installing later versions, we shall need to update the TF version 
+RUN pip3 install tensorflow-data-validation==0.15.0
+RUN pip3 install tensorflow-transform==0.15.0
+RUN pip3 install tensorflow-model-analysis==0.15.2
+RUN pip3 install tensorflow-metadata==0.15.0
+
+### Changes for including flask in the Inference Engine
+RUN conda install -c conda-forge gunicorn==19.9.0 
+RUN conda install -c conda-forge mysql-connector-python
+RUN conda install -c conda-forge tinydb
+RUN ln -s /root/anaconda3/bin/gunicorn /bin/gunicorn
+
+# create a directory for storing all the files
+RUN mkdir /usr/lib/mysql_files
+ADD mysql-init /usr/lib/mysql_files/mysql-init
+
+# install mysql server
+RUN wget http://repo.mysql.com/mysql80-community-release-el7.rpm --directory-prefix=/usr/lib/
+RUN sudo -E rpm -ivh /usr/lib/mysql80-community-release-el7.rpm
+RUN yum -y install mysql-community-server && cp /var/log/mysqld.log /usr/lib/mysql_files/mysqld.log
+
+RUN yum -y install haproxy
+RUN pip install 2to3

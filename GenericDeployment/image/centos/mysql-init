@@ -1,0 +1,13 @@
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Password12!'; /*change the default password*/
+CREATE DATABASE flaskdb; /*create a new database*/
+
+/*create a new user*/
+CREATE USER 'flaskusr'@'localhost' IDENTIFIED BY 'Password12!';
+GRANT ALL PRIVILEGES ON flaskdb.* TO 'flaskusr'@'localhost' WITH GRANT OPTION;
+
+/*make the user accessible by all th nodes*/
+CREATE USER 'flaskusr'@'%' IDENTIFIED BY 'Password12!';
+GRANT ALL PRIVILEGES ON flaskdb.* TO 'flaskusr'@'%' WITH GRANT OPTION;
+ALTER USER 'flaskusr'@'%' IDENTIFIED WITH mysql_native_password BY 'Password12!';
+
+FLUSH PRIVILEGES;

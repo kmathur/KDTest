@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# Copyright 2019 (c) BlueData Software, Inc.
+#
+#
+
+mkdir -p /run/gunicorn
+gunicorn --preload --pid /run/gunicorn/pid --access-logfile /var/log/guestconfig/serveraccess.log --log-file /var/log/guestconfig/gunicorn.log --log-level=debug --chdir /opt/guestconfig/flask_configure/ -t 900 -w 10 --bind @@@FQDN@@@:10001 views:app
